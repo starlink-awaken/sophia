@@ -73,8 +73,12 @@ class ParadigmLearner:
             "completed": trace.completed,
             "ts": trace.timestamp,
         }
+        import hashlib
+        import uuid
         ts_us = int(time.time() * 1_000_000)
-        path = self.trace_dir / f"trace_{ts_us}_{hash(trace.query) & 0xFFFF:04x}.json"
+        query_hash = hashlib.sha256(trace.query.encode()).hexdigest()[:16]
+        unique_id = str(uuid.uuid4())[:8]
+        path = self.trace_dir / f"trace_{ts_us}_{query_hash}_{unique_id}.json"
         with open(path, "w") as f:
             json.dump(entry, f, indent=2)
         self._cache = None  # Invalidate cache
