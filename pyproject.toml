@@ -1,0 +1,25 @@
+[project]
+name = "sophia"
+version = "0.2.0"
+description = "Sophia — Symbolic Research Paradigm Engine. Composable, dynamically programmable research methodology based on state machine formalism (Turing-machine-inspired)."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [{name = "Minerva Contributors"}]
+keywords = ["research", "paradigm", "state-machine", "symbolic", "methodology", "compiler", "learning"]
+dependencies = [
+    "rich>=13.0",
+    "fastmcp>=0.1",
+]
+
+[project.scripts]
+sophia = "sophia.cli:main"
+sophia-mcp = "sophia.server.mcp_server:main"
+sophia-tui = "sophia.tui.app:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.24", "ruff>=0.8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
