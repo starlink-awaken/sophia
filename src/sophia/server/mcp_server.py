@@ -3,10 +3,16 @@
 from __future__ import annotations
 
 import json
+import os
 
 from fastmcp import FastMCP
 
-mcp = FastMCP("Sophia — Research Paradigm Engine")
+_AUTH_TOKEN = os.environ.get("SOPHIA_AUTH_TOKEN", "")
+
+mcp = FastMCP(
+    "Sophia — Research Paradigm Engine",
+    mask_error_details=True,
+)
 
 _learner_instance = None
 
@@ -31,7 +37,9 @@ def compile_paradigm(query: str, use_llm: bool = False) -> str:
         use_llm: Whether to use LLM for compilation (default: rule-based)
     """
     from sophia.compiler import compile_paradigm_sync
-    program = compile_paradigm_sync(query)
+    if not query.strip():
+        return json.dumps({"error": "Query must not be empty"})
+    program = compile_paradigm_sync(query[:1000])
     return json.dumps(program.to_dict(), ensure_ascii=False, indent=2)
 
 
@@ -94,11 +102,24 @@ def record_trace(query: str, paradigm_name: str, operations: str, quality_score:
         quality_score: Quality score (0-100) of the research
     """
     from sophia.learner import ResearchTrace
+    from sophia.symbols import AtomicOp
+
+    if not query.strip():
+        return json.dumps({"error": "Query must not be empty"})
+    if not paradigm_name.strip():
+        return json.dumps({"error": "Paradigm name must not be empty"})
+    if not 0 <= quality_score <= 100:
+        return json.dumps({"error": "Quality score must be 0-100"})
+
     ops = [o.strip() for o in operations.split(",") if o.strip()]
-    trace = ResearchTrace(query=query, paradigm_name=paradigm_name, operations=ops,
-                          quality_score=quality_score, completed=True)
+    valid_ops = [op for op in ops if AtomicOp.from_string(op) is not None]
+    if not valid_ops:
+        return json.dumps({"error": f"No valid operations. Allowed: {[o.value for o in AtomicOp]}"})
+
+    trace = ResearchTrace(query=query[:500], paradigm_name=paradigm_name[:200],
+                          operations=valid_ops, quality_score=quality_score, completed=True)
     _get_learner().record(trace)
-    return json.dumps({"status": "recorded", "query": query[:100], "ops": ops})
+    return json.dumps({"status": "recorded", "query": query[:100], "ops": valid_ops})
 
 
 @mcp.tool()
@@ -106,8 +127,10 @@ def get_effective_ops(domain_hint: str = "") -> str:
     """Get operation effectiveness scores based on past traces.
 
     Args:
-        domain_hint: Optional domain filter for traces
+        domain_hint: Optional domain filter for traces (min 4 chars)
     """
+    if domain_hint and len(domain_hint) < 4:
+        return json.dumps({})
     scores = _get_learner().get_effective_ops(domain_hint=domain_hint)
     return json.dumps(scores, ensure_ascii=False, indent=2)
 
@@ -117,8 +140,10 @@ def suggest_ops(domain_hint: str = "") -> str:
     """Suggest the most effective operations based on learning history.
 
     Args:
-        domain_hint: Optional domain filter
+        domain_hint: Optional domain filter (min 4 chars)
     """
+    if domain_hint and len(domain_hint) < 4:
+        return json.dumps([])
     ops = _get_learner().suggest_ops(domain_hint=domain_hint)
     return json.dumps(ops, ensure_ascii=False, indent=2)
 
@@ -130,7 +155,9 @@ def suggest_paradigm(query: str) -> str:
     Args:
         query: The research question to optimize for
     """
-    suggestion = _get_learner().suggest_paradigm(query)
+    if not query.strip():
+        return json.dumps({"error": "Query must not be empty"})
+    suggestion = _get_learner().suggest_paradigm(query[:1000])
     return json.dumps(suggestion, ensure_ascii=False, indent=2)
 
 
