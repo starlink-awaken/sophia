@@ -34,7 +34,7 @@ sophia-mcp = "sophia.server.mcp_server:main"
 sophia-tui = "sophia.tui.app:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "pytest-asyncio>=0.24", "ruff>=0.8"]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.24", "ruff>=0.8", "mypy>=1.0"]
 
 [tool.ruff]
 target-version = "py311"
