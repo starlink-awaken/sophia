@@ -7,10 +7,26 @@ license = {text = "MIT"}
 requires-python = ">=3.11"
 authors = [{name = "Minerva Contributors"}]
 keywords = ["research", "paradigm", "state-machine", "symbolic", "methodology", "compiler", "learning"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 dependencies = [
     "rich>=13.0",
     "fastmcp>=0.1",
 ]
+
+[project.urls]
+Homepage = "https://github.com/starlink-awaken/sophia"
+Repository = "https://github.com/starlink-awaken/sophia.git"
+Documentation = "https://github.com/starlink-awaken/sophia#readme"
+Issues = "https://github.com/starlink-awaken/sophia/issues"
 
 [project.scripts]
 sophia = "sophia.cli:main"
@@ -19,6 +35,17 @@ sophia-tui = "sophia.tui.app:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "pytest-asyncio>=0.24", "ruff>=0.8"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "C4", "SIM"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
 
 [build-system]
 requires = ["hatchling"]
