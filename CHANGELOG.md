@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.1] — 2026-05-15
+
+### Fixed
+- Trace hash collision: sha256 + uuid4 (was 16-bit hash, collision rate ~1/65536)
+- LLM prompt injection hardening: query sanitized in `<QUERY>` delimiters
+- CI: pip-audit dependency vulnerability scan + mypy type checking
+
+### Added
+- SECURITY.md
+- PyPI classifiers + project.urls
+
 ## [0.2.0] — 2026-05-13
 
 ### Added
