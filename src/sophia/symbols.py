@@ -10,10 +10,9 @@ A paradigm is a ParadigmProgram composed from these atoms — not a fixed templa
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Callable
-
 
 # ═══════════════════════════════════════════════════════════════════════
 # State Symbols

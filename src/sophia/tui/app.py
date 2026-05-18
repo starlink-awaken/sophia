@@ -6,11 +6,11 @@ from __future__ import annotations
 def main():
     """Interactive paradigm explorer TUI."""
     try:
+        from rich import box
         from rich.console import Console
         from rich.panel import Panel
-        from rich.table import Table
         from rich.prompt import Prompt
-        from rich import box
+        from rich.table import Table
     except ImportError:
         print("Rich not installed. Run: pip install rich")
         return 1
@@ -25,8 +25,8 @@ def main():
     console.print()
 
     from sophia.compiler import compile_paradigm_sync
-    from sophia.symbols import ResearchState, AtomicOp, BASE_TRANSITIONS
     from sophia.learner import ParadigmLearner
+    from sophia.symbols import BASE_TRANSITIONS, AtomicOp, ResearchState
 
     learner = ParadigmLearner()
 

@@ -9,6 +9,7 @@ After each research execution, the learner:
 
 from __future__ import annotations
 
+import contextlib
 import json
 import time
 from dataclasses import dataclass, field
@@ -49,10 +50,8 @@ class ParadigmLearner:
             return self._cache[:limit]
         traces = []
         for f in files[:limit]:
-            try:
+            with contextlib.suppress(Exception):
                 traces.append(json.loads(f.read_text()))
-            except Exception:
-                pass
         self._cache = traces
         self._cache_mtime = newest
         return traces

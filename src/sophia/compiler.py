@@ -10,7 +10,9 @@ Both paths filter BASE_TRANSITIONS to include only rules for selected operations
 from __future__ import annotations
 
 from sophia.symbols import (
-    AtomicOp, BASE_TRANSITIONS, ParadigmProgram,
+    BASE_TRANSITIONS,
+    AtomicOp,
+    ParadigmProgram,
 )
 
 # Pre-built operation sets for common research patterns

@@ -26,8 +26,8 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("transitions", help="List base transition rules")
 
     # learn
-    l = sub.add_parser("learn", help="Show learning insights")
-    l.add_argument("--domain", default="", help="Filter by domain")
+    learn_parser = sub.add_parser("learn", help="Show learning insights")
+    learn_parser.add_argument("--domain", default="", help="Filter by domain")
 
     # evolve
     ev = sub.add_parser("evolve", help="Suggest paradigm improvements from learning history")
@@ -122,8 +122,8 @@ def main():
                 print(f"    [{t['quality']}分] {t['query'][:80]}")
                 print(f"           操作: {' → '.join(t['ops'])}")
 
-            added = set(suggestion["recommended_ops"]) - set(op.value for op in default.operations)
-            removed = set(op.value for op in default.operations) - set(suggestion["recommended_ops"])
+            added = set(suggestion["recommended_ops"]) - {op.value for op in default.operations}
+            removed = {op.value for op in default.operations} - set(suggestion["recommended_ops"])
             if added:
                 print(f"\n  ✚ 建议增加: {sorted(added)}")
             if removed:

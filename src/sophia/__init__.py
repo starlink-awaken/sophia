@@ -9,9 +9,11 @@ Quick start:
     print(program.to_dict())
 """
 
+from sophia.compiler import compile_paradigm, compile_paradigm_sync, recompile_from_dict
+from sophia.learner import ParadigmLearner, ResearchTrace
 from sophia.symbols import (
-    AtomicOp,
     BASE_TRANSITIONS,
+    AtomicOp,
     ParadigmProgram,
     ResearchState,
     TransitionRule,
@@ -21,8 +23,6 @@ from sophia.symbols import (
     gate_has_sources,
     gate_quality_pass,
 )
-from sophia.compiler import compile_paradigm, compile_paradigm_sync, recompile_from_dict
-from sophia.learner import ParadigmLearner, ResearchTrace
 
 __all__ = [
     "AtomicOp", "ResearchState", "TransitionRule", "ParadigmProgram",
@@ -32,3 +32,11 @@ __all__ = [
     "compile_paradigm", "compile_paradigm_sync", "recompile_from_dict",
     "ParadigmLearner", "ResearchTrace",
 ]
+"""
+Sophia — 符号化研究范式引擎。
+
+跨项目桥接:
+- sophia → minerva: minerva 测试依赖 sophia.compiler + sophia.learner
+- sophia → pallas: pallas pipeline 可加载 sophia 范式
+- sophia → agora: 共享 MCP/fastmcp 生态
+"""
